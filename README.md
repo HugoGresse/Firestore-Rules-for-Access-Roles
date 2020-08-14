@@ -34,8 +34,8 @@ This is a sample/demo of Firestore rules with three (3) access level (admin/mode
 
 
 If you need more information: 
-- [firestore.rules]()
-- [firestore.rules.spec.js (tests)]()
+- [firestore.rules](https://github.com/HugoGresse/Firestore-Rules-for-Access-Roles/blob/master/firestore.rules)
+- [firestore.rules.spec.js (tests)](https://github.com/HugoGresse/Firestore-Rules-for-Access-Roles/blob/master/firestore.rules.spec.js)
 
 _Originaly made for [this Stackoverflow question](https://stackoverflow.com/questions/63302743/firestore-security-access-roles-system)_
 
