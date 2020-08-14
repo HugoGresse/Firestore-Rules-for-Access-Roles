@@ -10,7 +10,8 @@
   "author": "Hugo Gresse",
   "license": "ISC",
   "devDependencies": {
-    "@firebase/testing": "^0.20.10"
+    "@firebase/testing": "^0.20.10",
+    "jest": "^26.4.0"
   },
   "dependencies": {
     "firebase": "^7.17.2",
