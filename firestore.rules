@@ -1,0 +1,55 @@
+rules_version = '2';
+service cloud.firestore {
+    match /databases/{database}/documents {
+        //Access levels:
+        //- Peon: Can only see their own user document and all subcollections
+        //- Moderator: Can see any document within the organisation
+        //- Administrator: Can see and do everything
+
+        function getAccountType(orgId, userId) {
+          return get(/databases/$(database)/documents/organizations/$(orgId)/peoples/$(userId)).data.accountType;
+        }
+        function isAdmin(orgID){
+          return getAccountType(orgID, request.auth.uid) == "admin";
+        }
+        function isModerator(orgID){
+          return getAccountType(orgID, request.auth.uid) == "moderator";
+        }
+        function isOwnData(userId){
+          return request.auth.uid == userId;
+        }
+        function authenticated(){
+          return request.auth != null;
+        }
+
+        match /organizations/{orgID} {
+
+            allow read: if authenticated() && (isAdmin(orgID) || isModerator(orgID));
+            allow create: if authenticated();
+            allow update: if authenticated() && (isAdmin(resource.data.organisationId));
+            allow delete: if authenticated() && isAdmin(orgID);
+
+            match /establishments/{estId} {
+                allow read: if authenticated() && (isAdmin(orgID) || isModerator(orgID));
+                allow update: if authenticated() && (isAdmin(orgID));
+                allow create: if authenticated() && isAdmin(orgID);
+                allow delete: if authenticated() && isAdmin(orgID);
+            }
+
+            match /peoples/{userID} {
+                allow read: if authenticated() && (isAdmin(resource.data.organisationId) || isModerator(resource.data.organisationId) || isOwnData(resource.data.userId));
+                allow update: if authenticated() && (isAdmin(resource.data.organisationId) || isOwnData(resource.data.userId));
+                allow create: if authenticated() && (isOwnData(userID) || isAdmin(orgID));
+                allow delete: if authenticated() && (isAdmin(orgID));
+
+
+                match /documents/{docId} {
+                    allow read: if authenticated() && (isAdmin(orgID) || isModerator(orgID) || isOwnData(userID));
+                    allow update: if authenticated() && (isAdmin(orgID) || isOwnData(userID));
+                    allow create: if authenticated() && (isAdmin(orgID) || isOwnData(userID));
+                    allow delete: if authenticated() && (isAdmin(orgID));
+                }
+            }
+        }
+    }
+}

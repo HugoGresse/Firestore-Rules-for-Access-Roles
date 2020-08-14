@@ -1,0 +1,22 @@
+{
+  "name": "firestore-access-roles-rules",
+  "version": "1.0.0",
+  "description": "Provide an example firestore rules for role based access",
+  "main": "index.js",
+  "scripts": {
+    "start": "firebase emulators:start",
+    "test": "jest firestore.rules.spec.js"
+  },
+  "author": "Hugo Gresse",
+  "license": "ISC",
+  "devDependencies": {
+    "@firebase/testing": "^0.20.10"
+  },
+  "dependencies": {
+    "firebase": "^7.17.2",
+    "jest-environment-node": "^26.3.0"
+  },
+  "jest": {
+    "testEnvironment": "./custom-jest-environment.js"
+  }
+}
